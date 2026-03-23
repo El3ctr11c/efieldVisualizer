@@ -12,7 +12,7 @@ def place_line_of_charge(charge, length, y0, q_list):
     y0: y-coordinate of the line
     q_list: list to append charges to
     """
-    number = 100  # Number of discrete charges to approximate the continuous line
+    number = 70  # Number of discrete charges to approximate the continuous line
     start_x = -length/2
     end_x = length/2
     spacing = length / number
@@ -27,7 +27,7 @@ def place_line_of_charge(charge, length, y0, q_list):
         q_list.append((chargeMagnitude, chargeX, chargeY))
         i += 1
 
-def build_parallel_plate_capacitor(plate_length, plate_separation, surface_charge_density, q_list):
+def build_parallel_plate_capacitor(charge, plate_length, plate_separation, q_list):
     """
     Build a parallel plate capacitor with two horizontal plates.
     
@@ -37,14 +37,8 @@ def build_parallel_plate_capacitor(plate_length, plate_separation, surface_charg
     surface_charge_density: charge per unit length (σ) for the plates
     q_list: list to append charges to
     """
-    # Convert surface charge density to discrete charge magnitude
-    # Each discrete charge represents a small segment of length dx
-    number_of_elements = 100
-    segment_length = plate_length / number_of_elements
-    discrete_charge = surface_charge_density * segment_length
-    
     # Top plate (positive charge)
-    place_line_of_charge(discrete_charge, plate_length, plate_separation/2, q_list)
+    place_line_of_charge(charge, plate_length, plate_separation/2, q_list)
     
     # Bottom plate (negative charge)
-    place_line_of_charge(-discrete_charge, plate_length, -plate_separation/2, q_list)
+    place_line_of_charge(-charge, plate_length, -plate_separation/2, q_list)

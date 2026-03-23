@@ -6,13 +6,13 @@ import Capacitor as Cap
 
 # Domain for plot: X: [min, max], Y: [min, max]
 # Also Note that X Domain and Y are the same => Square Plot
-MIN = -100
-MAX = 100
+MIN = -1000
+MAX = 1000
 
-# Number of points in x-coordinate and y-coordinate each 
-N = 1000 #HIGHER NUMBER == HIGHER RESOLUTION
+# Density of points in the grid
+N = 500 #HIGHER NUMBER == HIGHER RESOLUTION
 
-def main():
+def capacitorTest():
     ## ----------- PLOT INITIALIZATION ----------- ##
     # Set evenly spaced points within the interval [MIN, MAX]
     a, b = np.linspace(MIN, MAX, N), np.linspace(MIN, MAX, N) 
@@ -24,15 +24,17 @@ def main():
     Ex, Ey = np.zeros_like(xa), np.zeros_like(xa) # We just initialize them to have zeros
 
     # Initialize array of charges with value, and position (|Q|, x, y)
-    Q = []
+    charges = []
 
     plate_length = float(input("Enter plate length (centered at x=0): "))
     plate_separation = float(input("Enter plate separation (distance between plates): "))
-    surface_charge_density = float(input("Enter surface charge density (σ): "))
-    Cap.build_parallel_plate_capacitor(plate_length, plate_separation, surface_charge_density, Q)
+    plate_charge = float(input("Enter the plate equilibrium charge (charge will be same on both sides just opposite signs):  "))
+
+
+    Cap.build_parallel_plate_capacitor(plate_charge, plate_length, plate_separation, charges)
      
     # Color Charge locations 
-    for q in Q:  # mark charge locations
+    for q in charges:  # mark charge locations
         plt.text(q[1], q[2], 'o', color = 'r' if q[0] < 0 else 'b', fontsize=15, va='center', ha='center')
 
     # Calculate Ex and Ey at each point in the grid due to all charges
@@ -42,17 +44,18 @@ def main():
             x, y = xa[i,j], ya[i,j]
 
             # Calculates the E field at (x,y) due to ALL CHARGES BRO HOLY MOLY
-            for k in range(len(Q)):
+            for k in range(len(charges)):
                 # Add up Ex and Ey components at that point from a specific charge in list
-                Ex[i,j] += Q[k][0]*(x-Q[k][1])/ ((x-Q[k][1])**2+(y-Q[k][2])**2)**(1.5)
-                Ey[i,j] += Q[k][0]*(y-Q[k][2])/ ((x-Q[k][1])**2+(y-Q[k][2])**2)**(1.5)
+                Ex[i,j] += charges[k][0]*(x-charges[k][1])/ ((x-charges[k][1])**2+(y-charges[k][2])**2)**(1.5)
+                Ey[i,j] += charges[k][0]*(y-charges[k][2])/ ((x-charges[k][1])**2+(y-charges[k][2])**2)**(1.5)
 
                 #Remember cuz Ex and Ey are lists which contain
                 #the E-field at every point in the grid right???? :OOO
-
-    # Show the plots vor visualization 
+    # Show the plots for visualization 
+    plt.xlabel("X-Axis")
+    plt.ylabel("Y-Axis")
+    plt.title(f"Electric Field of {len(charges)} Charges combined")
     plt.streamplot(xa, ya, Ex, Ey, color='black', density=1.5) #plot the field lines using streamplot
     plt.show() # show the plot
 
-if __name__ == "__main__":
-    main()
+capacitorTest()
