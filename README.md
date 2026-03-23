@@ -33,3 +33,4 @@ python main.py
 Enter the file to visualize: dipole.txt
 ```
 # This will output the image of the dipole
+![Electric Field Example](/images/Figure_1.png?raw=true "Title")
