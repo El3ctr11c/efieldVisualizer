@@ -1,7 +1,3 @@
-import matplotlib.pyplot as plt
-import numpy as np
-
-# Helper function for capacitor
 def place_line_of_charge(charge, length, y0, q_list):
     """
     Place a horizontal line of discrete charges to simulate a charged plate.
@@ -12,19 +8,17 @@ def place_line_of_charge(charge, length, y0, q_list):
     y0: y-coordinate of the line
     q_list: list to append charges to
     """
-    number = 70  # Number of discrete charges to approximate the continuous line
+    number = 100  # Number of discrete charges to approximate the continuous line
     start_x = -length/2
-    end_x = length/2
     spacing = length / number
     
     i = 0
     while i < number:
-        # Keep adding charges in a line
-        chargeMagnitude = charge
+        # Keep adding charges in a line (same height = y0)
         chargeX = start_x + i * spacing + spacing/2  # Center each charge element
         chargeY = y0
         
-        q_list.append((chargeMagnitude, chargeX, chargeY))
+        q_list.append((charge, chargeX, chargeY))
         i += 1
 
 def build_parallel_plate_capacitor(charge, plate_length, plate_separation, q_list):
